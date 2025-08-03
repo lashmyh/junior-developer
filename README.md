@@ -1,14 +1,14 @@
 <div align="center">
   <img src="frontend/public/logo.png" alt="Citizens Advice Logo" width="100" height="100" />
     <h1>Citizens Advice SORT</h1>
-    <h3>Junior Developer Practical</h3>
+    <h3>Junior Developer Practical Solution - Lashmy Habib</h3>
 </div>
 
 ---
 
 ## Overview
 
-This is a full stack practical for Junior Developer at Citizens Advice SORT. The project consists of a full-stack application with a Python backend and Next.js frontend.
+This is my attempt at the full stack practical for the Junior Developer role at Citizens Advice SORT. The project consists of a full-stack application with a Python backend and Next.js frontend.
 
 ## Project Structure
 
@@ -34,10 +34,13 @@ junior-developer/
 ## Task Description
 
 ### Backend Task
-In the backend, you need to:
-1. **Identify cited sources** within the content from `mock.json`
-2. **Replace document IDs** with actual links to the sources
-3. **Extract favicon URLs** from the source websites
+In the backend, I have:
+1. **Identified cited sources** within the content from `mock.json`
+2. **Replaced document IDs** with actual links to the sources
+3. **Extracted favicon URLs** from the source websites
+4. **Corrected a typing error** found in the mock data where one of the source ID's was missing a letter
+
+### YET TO DO
 
 ### Frontend Task
 The `Content.tsx` component has been provided for you to:
@@ -46,12 +49,6 @@ The `Content.tsx` component has been provided for you to:
 3. **Create a clean, user-friendly interface**
 
 ## Getting Started
-
-### Prerequisites
-- Python 3.10+
-- Node.js 18+
-- npm
-- [poetry](https://python-poetry.org/docs/#installation)
 
 ### Installation & Setup
 
