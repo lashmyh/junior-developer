@@ -38,7 +38,7 @@ In the backend, I have:
 1. **Identified cited sources** within the content from `mock.json`
 2. **Replaced document IDs** with actual links to the sources
 3. **Extracted favicon URLs** from the source websites
-4. **Corrected a typing error** found in the mock data where one of the source ID's was missing a letter
+
 
 ### YET TO DO
 
