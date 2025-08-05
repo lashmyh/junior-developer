@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  images: {
+    domains: [
+      "citizensadvice.org.uk",
+      "www.citizensadvice.org.uk",
+      "gov.uk",
+      "www.gov.uk"
+    ],
+  },
 };
 
 export default nextConfig;
