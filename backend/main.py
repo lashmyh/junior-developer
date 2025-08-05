@@ -5,10 +5,14 @@ from pathlib import Path
 from bs4 import BeautifulSoup 
 from typing import Set
 from urllib.parse import urljoin, urlparse
+import logging
 
 
 app = FastAPI()
 
+# logging configuration
+logging.basicConfig(level=logging.WARNING) #only log warning or higher level messages
+logger = logging.getLogger(__name__)
 
 def find_cited_source_ids(content: str) -> Set[str]:
     """Find all cited source ID's in the content using regex"""
@@ -19,23 +23,38 @@ def find_cited_source_ids(content: str) -> Set[str]:
 
 
 def process_citations(content: str, sources: list[Source]) -> str:
-    """Replace the ref tags containing ref. ID's with actual HTML links."""
-    # map source ID's to URLs
-    source_map = {source.id: source.source for source in sources}
+    """
+    Replace the <ref> tags containing ref. ID's with actual HTML links.
+    
+    Invalid references are logged for developers to fix.
+
+    """
+    # map source ID's to corresponding titles and URLs
+    source_map = {source.id: (source.title, source.source) for source in sources}
+
+    invalid_refs =[]
 
     def replace_citation(match):
         source_id = match.group(1)
         if source_id in source_map:
-            source_url = source_map[source_id]
+            title, url = source_map[source_id]
             # replace the match with the source url
-            return f'<a href="{source_url}" target="_blank" rel="noopener noreferrer">[Source]</a>'
-        # in case of no match, return entire ref tag
-        return match.group(0)
+            return f'<a href="{url}" target="_blank" rel="noopener noreferrer" aria-label="External link to {title}">{title}</a>'
+        # in case of no match, log the invalid reference 
+        invalid_refs.append(source_id)
+        return f'<span class="citation-error" role="alert" aria-label="Missing reference">[Reference not available: {source_id}]</span>'
+
     pattern = r'<ref>([^<]+)</ref>'
     processed_content = re.sub(pattern, replace_citation, content)
+    
+    # log invalid references for developers
+    if invalid_refs:
+        logger.warning(
+            f"Invalid citation references found in content."
+            f"The following IDs are invalid: {invalid_refs}"
+        )
 
     return processed_content
-
 
 def extract_favicon_url(url: str) -> str:
     """Extract the favicon URL from a website"""
@@ -49,7 +68,7 @@ def extract_favicon_url(url: str) -> str:
 
         soup = BeautifulSoup(response.content, 'html.parser')
 
-        #finds all link elements that contain string 'icon' in the rel value
+        # finds all link elements that contain string 'icon' in the rel value
         icon_links = soup.find_all("link", rel=lambda x: x and 'icon' in x.lower())
 
         for link in icon_links:
@@ -106,7 +125,7 @@ def get_data() -> list[ProcessedData]:
 
             processed_sources.append(processed_source)
 
-        # process content to replace ref elements with actual links
+        # process content to replace <ref> elements with actual links
         processed_content = process_citations(data_item.content, data_item.sources)
 
         processed_item = ProcessedData(
