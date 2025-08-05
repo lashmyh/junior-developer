@@ -15,7 +15,13 @@ logging.basicConfig(level=logging.WARNING) #only log warning or higher level mes
 logger = logging.getLogger(__name__)
 
 def find_cited_source_ids(content: str) -> Set[str]:
-    """Find all cited source ID's in the content using regex"""
+    """Find all cited source ID's in the content using regex
+    args:
+        content (str): The raw content string containing <ref> tags
+
+    returns:
+        Set[str]: A set of cited source IDs
+    """
     # source ID pattern: <ref>source_id</ref>
     pattern = r'<ref>([^<]+)</ref>'
     cited_ids =set(re.findall(pattern, content))
@@ -28,8 +34,15 @@ def process_citations(content: str, sources: list[Source]) -> str:
     
     Invalid references are logged for developers to fix.
 
+    args:
+        content (str): The original content with <ref> tags
+        sources (list[Source]): List of source objects
+
+    returns:
+        str: The content with <ref> tags replaced by proper HTML links
+
     """
-    # map source ID's to corresponding titles and URLs
+    # map source IDs to (title, URL) tuples for quick lookup during citation replacement
     source_map = {source.id: (source.title, source.source) for source in sources}
 
     invalid_refs =[]
@@ -38,11 +51,11 @@ def process_citations(content: str, sources: list[Source]) -> str:
         source_id = match.group(1)
         if source_id in source_map:
             title, url = source_map[source_id]
-            # replace the match with the source url
+            # replace <ref> with a clickable anchor tag linking to the source
             return f'<a href="{url}" target="_blank" rel="noopener noreferrer" aria-label="External link to {title}">{title}</a>'
         # in case of no match, log the invalid reference 
         invalid_refs.append(source_id)
-        return f'<span class="citation-error" role="alert" aria-label="Missing reference">[Reference not available: {source_id}]</span>'
+        return f'<span class="citation-error" role="alert" aria-label="Missing reference">[Reference not available]</span>'
 
     pattern = r'<ref>([^<]+)</ref>'
     processed_content = re.sub(pattern, replace_citation, content)
@@ -57,7 +70,13 @@ def process_citations(content: str, sources: list[Source]) -> str:
     return processed_content
 
 def extract_favicon_url(url: str) -> str:
-    """Extract the favicon URL from a website"""
+    """ attemp to extract the favicon URL from a website 
+    args:
+        url (str): website URL to fetch the favicon from
+
+    returns:
+        str: favicon URL if found, else empty string.
+    """
     try:
         # user-agent headers to prevent request potentially being blocked
         headers = {
@@ -100,6 +119,12 @@ def extract_favicon_url(url: str) -> str:
 
 @app.get("/data", response_model=list[ProcessedData])
 def get_data() -> list[ProcessedData]:
+    """
+    fetch, process, and return structured data with enhanced citations and favicon URLs
+
+    returns:
+        list[ProcessedData]: the cleaned and enriched data for frontend consumption.
+    """
     data = Path("data/mock.json").read_text()
     data_list = [Data.model_validate(item) for item in json.loads(data)]
     
