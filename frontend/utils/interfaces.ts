@@ -5,12 +5,12 @@ export interface Source {
     source: string;
     favicon_url: string;
     is_cited: boolean;
-  }
+}
   
 export interface Data {
-category: string;
-sources: Source[];
-content: string;
+    category: string;
+    sources: Source[];
+    content: string;
 }
 
 export interface ContentProps {
