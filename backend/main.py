@@ -1,14 +1,36 @@
 import json, requests, re
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from models import Data, Source, ProcessedData, ProcessedSource
 from pathlib import Path
 from bs4 import BeautifulSoup 
 from typing import Set
 from urllib.parse import urljoin, urlparse
 import logging
+import os
+from dotenv import load_dotenv
 
+load_dotenv()  # load from .env file
 
 app = FastAPI()
+
+# CORS config
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+]
+
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    origins.append(frontend_url)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # logging configuration
 logging.basicConfig(level=logging.WARNING) #only log warning or higher level messages
