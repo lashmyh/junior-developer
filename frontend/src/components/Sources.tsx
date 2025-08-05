@@ -1,23 +1,36 @@
 import { SourceGroupProps } from "../../utils/interfaces";
 import Image from "next/image";
-import { LinkIcon } from "@heroicons/react/16/solid";
+import { LinkIcon, ClipboardDocumentIcon, CheckIcon } from "@heroicons/react/16/solid";
+import { useState } from "react";
 
+export default function Sources({ sources, title }: SourceGroupProps) {
 
-export default function Sources({ sources }: SourceGroupProps) {
+    const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null);
+
+    // copy to clipboard function
+    const copyToClipBoard = async (text: string, id: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            setCopiedLinkId(id)
+            //reset after 2 seconds
+            setTimeout(() => {
+                setCopiedLinkId(null)
+            }, 2000);
+        } catch (err) {
+            console.error("Faild to copy link", err)
+        };
+    };
 
     if (!sources || sources.length === 0) return null;
 
-    // separate cited and non-cited sources
-    const citedSources = sources.filter(source => source.is_cited);
-    const uncitedSources = sources.filter(source => !source.is_cited);
 
     return (
         <div className="flex flex-col gap-3 bg-orange-50 border-l-5 border-orange-200 px-3 py-5 w-full">
-            {citedSources.length > 0 && (
+            {sources.length > 0 && (
                 <>
-                <h3 className="text-lg font-bold mb-2">Cited Sources:</h3>
+                <h3 className="text-lg font-bold mb-2">{title} Sources:</h3>
                 <ul className="list-disc pl-5 space-y-2">
-                {citedSources.map(source => (
+                {sources.map(source => (
                     <li key={source.id} className="flex items-center gap-2">
                     {source.favicon_url && source.favicon_url.trim() !== ""
                     ? <Image src={source.favicon_url} alt="" aria-hidden="true" width={16} height={16} />
@@ -31,40 +44,22 @@ export default function Sources({ sources }: SourceGroupProps) {
                     >
                         {source.title}
                     </a>
+                    {/* copy to clipboard button */}
+                    <button onClick={() => copyToClipBoard(source.source, source.id)} aria-label={`Copy link to ${source.title}`}
+                        className="ml-2 p-1 rounded hover:bg-gray-200 hover:cursor-pointer hover:ring-2 active:ring-2 ring-offset-1 ring-blue-400 duration-300"
+                        title="Copy link to clipboard">
+                        {copiedLinkId === source.id ? (
+                            <CheckIcon className="size-4 text-blue-600" />
+                        ) : (
+                            <ClipboardDocumentIcon className="size-4 text-gray-500" />
+                        )}
+                    </button>
                     </li>
                 ))}
                 </ul>
                 </>
             )}
-            {uncitedSources.length > 0 && (
-                <>
-                <h3 className="font-bold text-lg mb-2">Other Sources:</h3>
-                <ul className="list-disc pl-5 space-y-2">
-                {uncitedSources.map(source => (
-                    <li key={source.id} className="flex items-center gap-2">
-                    <Image
-                        src={
-                        source.favicon_url && source.favicon_url.trim() !== ""
-                            ? source.favicon_url
-                            : "/default-favicon.svg"
-                        }
-                        alt={`${source.title} favicon`}
-                        width={16}
-                        height={16}
-                    />
-                    <a
-                        href={source.source}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline text-hyperlink hover:bg-blue-50 visited:text-purple-800"
-                    >
-                        {source.title}
-                    </a>
-                    </li>
-                ))}
-                </ul>
-                </>
-            )}
+    
             
         </div>
     )

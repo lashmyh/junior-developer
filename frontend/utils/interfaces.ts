@@ -19,10 +19,12 @@ export interface ContentProps {
 
 export interface CategoryItemProps {
     item: Data;
+    expanded: boolean;
 }
 
 export interface SourceGroupProps {
     sources: Source[];
+    title: string;
 }
 
 export interface InformationProps {
