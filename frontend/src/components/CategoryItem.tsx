@@ -11,7 +11,7 @@ import FormattedInformation from "./FormattedContent";
  *
  * Props:
  * - item: category data including content and sources
- * - expanded: external signal to force open/closed 
+ * - expanded: external signal to force open/closed, boolean
  */
 
 export default function CategoryItem({ item, expanded }: CategoryItemProps) {
