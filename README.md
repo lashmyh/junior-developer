@@ -1,54 +1,32 @@
 <div align="center">
   <img src="frontend/public/logo.png" alt="Citizens Advice Logo" width="100" height="100" />
-    <h1>Citizens Advice SORT</h1>
-    <h3>Junior Developer Practical Solution - Lashmy Habib</h3>
+  <h1>Citizens Advice SORT</h1>
+  <h3>Junior Developer Practical Solution – Lashmy Habib</h3>
 </div>
 
 ---
 
 ## Overview
 
-This is my attempt at the full stack practical for the Junior Developer role at Citizens Advice SORT. The project consists of a full-stack application with a Python backend and Next.js frontend.
+This is my solution to the full-stack practical exercise for the Junior Developer role at Citizens Advice SORT. The application is built using a Python (FastAPI) backend and a Next.js frontend.
 
-## Project Structure
+Based on the limited context provided, I’ve made the assumption that the data represents a sample of content from an internal adviser guidance system—designed to help advisers support clients more effectively. With this in mind, I’ve aimed to mirror the tone and formatting found on the [citizensadvice.org.uk](https://www.citizensadvice.org.uk) website to ensure the user interface feels familiar and accessible.
 
-```
-junior-developer/
-├── backend/
-│   ├── data/
-│   │   └── mock.json         # Mock data containing content and sources
-│   ├── main.py               # FastAPI backend server
-│   └── models.py             # Data models and schemas
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── page.tsx      # Main page component
-│   │   │   └── layout.tsx    # App layout
-│   │   └── components/
-│   │       └── Content.tsx   # Content display component
-│   └── public/
-│       └── logo.png          # Citizens Advice logo
-└── Makefile                  # Build and run commands
-```
+---
 
-## Task Description
+## Task Breakdown
 
-### Backend Task
-In the backend, I have:
-1. **Identified cited sources** within the content from `mock.json`
-2. **Replaced document IDs** with actual links to the sources
-3. **Extracted favicon URLs** from the source websites
+### Backend
+- **Parsed and identified cited sources** from the `mock.json` content, gracefully handling missing or malformed references.
+- **Replaced document IDs** with fully-qualified URLs based on the source metadata. I have also set up error logging for when this is not possile due to discrepancies between the article reference ID's and the content.
+- **Fetched and applied favicon URLs** for each source; a default icon is shown where no favicon is available. I have used icons from the Heroicons library throughout the project, as well as to replace missing favicons.
 
+### Frontend
+- **Displayed each piece of guidance content** with its associated cited and uncited sources clearly listed.
+- **Included favicons** for each source, enhancing visual recognition and trust.
+- **Applied accessible, user-friendly formatting**, closely following the Citizens Advice website's style for consistency and usability.
 
-### YET TO DO
-
-### Frontend Task
-The `Content.tsx` component has been provided for you to:
-1. **Display each piece of content** and its associated sources, both cited and non-cited
-2. **Show favicons** from the source websites alongside each source
-3. **Create a clean, user-friendly interface**
-
-## Getting Started
+---
 
 ### Installation & Setup
 
