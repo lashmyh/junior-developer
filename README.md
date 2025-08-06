@@ -10,7 +10,7 @@
 
 This is my solution to the full-stack practical exercise for the Junior Developer role at Citizens Advice SORT. The application is built using a Python (FastAPI) backend and a Next.js frontend.
 
-Based on the limited context provided, I’ve made the assumption that the data represents a sample of content from an internal adviser guidance system—designed to help advisers support clients more effectively. With this in mind, I’ve aimed to mirror the tone and formatting found on the [citizensadvice.org.uk](https://www.citizensadvice.org.uk) website to ensure the user interface feels familiar and accessible.
+Based on the limited context provided, I’ve made the assumption that the data represents a sample of content from an internal adviser guidance system, designed to help advisers support clients more effectively. With this in mind, I’ve aimed to mirror the tone and formatting found on the [citizensadvice.org.uk](https://www.citizensadvice.org.uk) website to ensure the user interface feels familiar and accessible.
 
 ---
 
